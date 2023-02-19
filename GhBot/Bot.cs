@@ -13,10 +13,15 @@ public class Bot
     public Bot()
     {
         Instance = this;
-        Client = new DiscordSocketClient();
+        Client = new DiscordSocketClient(new DiscordSocketConfig()
+        {
+            GatewayIntents = GatewayIntents.All
+        });
     }
     
     public DiscordSocketClient Client;
+
+    public LevelHandler LevelHandler;
 
     public BotConfig Config;
 
@@ -32,13 +37,14 @@ public class Bot
 
         await Client.LoginAsync(TokenType.Bot, Config.Token);
         await Client.StartAsync();
-
         await Client.SetActivityAsync(new Game("you 👀", ActivityType.Watching));
 
         _interactionService = new InteractionService(Client);
         _interactionService.Log += ClientOnLog;
-        
+
         Client.InteractionCreated += OnInteract;
+
+        LevelHandler = new LevelHandler(Client);
         
         await Task.Delay(-1);
     }
