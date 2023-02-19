@@ -4,6 +4,7 @@ namespace GhBot.Data;
 
 public class Member
 {
+    [PrimaryKey]
     public ulong DiscordId;
 
     public uint Level;

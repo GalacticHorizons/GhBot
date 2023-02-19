@@ -58,17 +58,21 @@ public static class Data
             member = AsType<Member>(reader);
         }
         else
-        {
-            member = new Member(discordId);
-        }
-
-        await CloseDatabase(connection);
+            member = null;
+        
         return member;
     }
 
-    public static async void UpdateMember(Member member)
+    public static async Task CreateMember(Member member)
     {
-        
+        await using MySqlConnection connection = await ConnectDatabase();
+        await SqlQueries.Insert(connection, SqlQueries.MembersTableName, member);
+    }
+
+    public static async Task UpdateMember(Member member)
+    {
+        await using MySqlConnection connection = await ConnectDatabase();
+        await SqlQueries.Update(connection, SqlQueries.MembersTableName, member);
     }
 
     public static T AsType<T>(DbDataReader reader) where T : new()
