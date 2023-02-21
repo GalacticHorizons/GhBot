@@ -84,7 +84,8 @@ public class LevelCommands : InteractionModuleBase<SocketInteractionContext>
         const double userPosX = 180;
         const double userPosY = 75;
 
-        c.SelectFontFace("sans-serif", FontSlant.Normal, FontWeight.Normal);
+        const string fontFace = "Roboto";
+        c.SelectFontFace(fontFace, FontSlant.Normal, FontWeight.Normal);
         c.SetSourceRGB(1, 1, 1);
         int fontSize = 40;
         c.SetFontSize(fontSize);
@@ -124,7 +125,7 @@ public class LevelCommands : InteractionModuleBase<SocketInteractionContext>
         c.ShowText(text);
         c.SetSourceRGB(0.6, 0.6, 0.6);
         c.MoveTo(userPosX, userPosY + 30);
-        c.SelectFontFace("sans-serif", FontSlant.Normal, FontWeight.Bold);
+        c.SelectFontFace(fontFace, FontSlant.Normal, FontWeight.Bold);
         c.SetFontSize(25);
         c.ShowText("#" + member.Discriminator);
 
