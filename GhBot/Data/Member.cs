@@ -15,6 +15,8 @@ public class Member
 
     public DateTime LastLvl;
 
+    public uint Coins;
+
     public Member()
     {
         DiscordId = 0;
@@ -22,6 +24,7 @@ public class Member
         LvlMsgs = 0;
         TotalMessages = 0;
         LastLvl = DateTime.UnixEpoch;
+        Coins = 0;
     }
     
     public Member(ulong discordId) : this()

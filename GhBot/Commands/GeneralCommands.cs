@@ -103,4 +103,20 @@ public class GeneralCommands : InteractionModuleBase<SocketInteractionContext>
 
         await FollowupAsync(embed: embed);
     }
+
+    [SlashCommand("notified", "Give yourself the notified role.")]
+    public async Task GiveNotified()
+    {
+        SocketGuildUser user = (SocketGuildUser) Context.User;
+        await user.AddRoleAsync(1077386286983303200);
+        await RespondAsync("Okay, I've given you the <@&1077386286983303200> role!", ephemeral: true);
+    }
+
+    [SlashCommand("unnotified", "Remove the notified role.")]
+    public async Task RemoveNotified()
+    {
+        SocketGuildUser user = (SocketGuildUser) Context.User;
+        await user.RemoveRoleAsync(1077386286983303200);
+        await RespondAsync("Okay, you no longer have the <@&1077386286983303200> role.", ephemeral: true);
+    }
 }
