@@ -69,7 +69,7 @@ public class Bot
     private async Task ClientOnReady()
     {
         await _interactionService.AddModulesAsync(Assembly.GetExecutingAssembly(), null);
-        await _interactionService.RegisterCommandsToGuildAsync(1075435117310398535);
+        await _interactionService.RegisterCommandsToGuildAsync(Config.ServerId);
     }
 
     private async Task OnInteract(SocketInteraction arg)

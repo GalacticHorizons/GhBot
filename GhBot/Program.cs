@@ -1,4 +1,5 @@
-﻿using GhBot;
+﻿using System;
+using GhBot;
 using GhBot.Data;
 
 Logger.UseConsoleLogs();

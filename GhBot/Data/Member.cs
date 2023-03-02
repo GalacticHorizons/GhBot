@@ -9,7 +9,7 @@ public class Member
 
     public uint Level;
 
-    public uint LvlMsgs;
+    public uint XP;
 
     public ulong TotalMessages;
 
@@ -21,7 +21,7 @@ public class Member
     {
         DiscordId = 0;
         Level = 0;
-        LvlMsgs = 0;
+        XP = 0;
         TotalMessages = 0;
         LastLvl = DateTime.UnixEpoch;
         Coins = 0;

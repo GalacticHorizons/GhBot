@@ -18,7 +18,9 @@ public class LevelHandler
 
     private async Task OnMessage(SocketMessage arg)
     {
-        SocketUserMessage msg = (SocketUserMessage) arg;
+        if (arg is not SocketUserMessage msg)
+            return;
+        
         // Ignore bots, they can't level up!
         if (msg.Author.IsBot)
             return;
@@ -27,7 +29,7 @@ public class LevelHandler
 
         if (member == null)
         {
-            member = new Member(msg.Author.Id) { Level = 0, TotalMessages = 1, LvlMsgs = 1, LastLvl = DateTime.Now };
+            member = new Member(msg.Author.Id) { Level = 0, TotalMessages = 1, XP = Level.CalculateXpFromMessage(msg.Content), LastLvl = DateTime.Now };
             await Data.Data.CreateMember(member);
             /*await msg.Channel.SendMessageAsync(
                 "Hey! You just sent your first message! Type `/level` in chat to see your level!");*/
@@ -37,16 +39,21 @@ public class LevelHandler
         member.TotalMessages++;
 
         bool hasLevelledUp = false;
+        uint coinsGained = 0;
         
-        if (msg.Content.Length >= 4 && DateTime.Now - member.LastLvl >= TimeSpan.FromSeconds(5))
+        if (Level.MessageMeetsRequirements(msg.Content, member))
         {
-            member.LvlMsgs++;
+            member.XP += Level.CalculateXpFromMessage(msg.Content);
 
-            if (member.LvlMsgs >= (member.Level * 5) + 5)
+            uint maxXp = Level.CalculateMaxXp(member.Level);
+            if (member.XP >= maxXp)
             {
-                member.LvlMsgs = 0;
+                member.XP -= maxXp;
                 member.Level++;
                 hasLevelledUp = true;
+
+                coinsGained = Level.CalculateCoinsForLevel(member.Level);
+                member.Coins += coinsGained;
             }
 
             member.LastLvl = DateTime.Now;
@@ -58,6 +65,6 @@ public class LevelHandler
 
         if (hasLevelledUp)
             await msg.Channel.SendMessageAsync(
-                $"{msg.Author.Mention}, you've just levelled up to level {member.Level}, and earned 528930754983257902357234958037 coins!");
+                $"{msg.Author.Mention}, you've just levelled up to level {member.Level}, and earned {coinsGained} coins!");
     }
 }

@@ -129,8 +129,8 @@ public class LevelCommands : InteractionModuleBase<SocketInteractionContext>
         c.SetFontSize(25);
         c.ShowText("#" + member.Discriminator);
 
-        uint maxLvlMsgs = (dbMember.Level * 5 + 5);
-        uint lvlMsgs = dbMember.LvlMsgs;
+        uint maxLvlMsgs = Level.CalculateMaxXp(dbMember.Level);
+        uint lvlMsgs = dbMember.XP;
 
         const double progressX = userPosX;
         const double progressY = 130;
@@ -210,5 +210,22 @@ public class LevelCommands : InteractionModuleBase<SocketInteractionContext>
         c.LineTo(x + r, y);
 
         c.ClosePath();
+    }
+
+    [SlashCommand("setlevel", "Set a member's level.")]
+    [DefaultMemberPermissions(GuildPermission.Administrator)]
+    public async Task SetMemberLevel(SocketUser user, uint level, uint xp)
+    {
+        await DeferAsync(true);
+        
+        Member member = await Data.Data.GetMember(user.Id);
+        member ??= new Member(user.Id);
+
+        member.Level = level;
+        member.XP = xp;
+
+        await Data.Data.UpdateMember(member);
+
+        await FollowupAsync($"Done! {user}'s level and XP have been set.", ephemeral: true);
     }
 }
